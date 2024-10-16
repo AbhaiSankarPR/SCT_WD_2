@@ -1,0 +1,223 @@
+<!--Code by Abhai Sankar P R-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Modern Stopwatch</title>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <div class="container">
+            <div class="display">
+                <span id="hr">00</span>:<span id="min">00</span>:<span id="sec">00</span>
+            </div>
+            <div class="buttons">
+                <button id="start">Start</button>
+                <button id="stop">Stop</button>
+                <button id="pause">Pause</button>
+                <button id="reset">Reset</button>
+                <button id="lap">Time Lapse</button>
+            </div>
+            <ul id="laps"></ul>
+        </div>
+    </body>
+    <script>
+        let startBtn = document.getElementById('start');
+        let stopBtn = document.getElementById('stop');
+        let pauseBtn = document.getElementById('pause');
+        let resetBtn = document.getElementById('reset');
+        let lapBtn = document.getElementById('lap');
+        let lapsContainer = document.getElementById('laps');
+        
+        let hour = 0;
+        let min = 0;
+        let sec = 0;
+        let timer = false;
+        let pause = false;
+
+        startBtn.addEventListener('click', function() {
+            if (!pause) {
+                hour = 0;
+                min = 0;
+                sec = 0;
+            }
+            pause = false;
+            timer = true;
+            stopwatch();
+        });
+
+        stopBtn.addEventListener('click', function() {
+            timer = false;
+            pause = false;
+            hour = 0;
+            min = 0;
+            sec = 0;
+            updateDisplay();
+        });
+
+        pauseBtn.addEventListener('click', function() {
+            timer = false;
+            pause = true;
+        });
+
+        resetBtn.addEventListener('click', function() {
+            timer = false;
+            pause = false;
+            hour = 0;
+            min = 0;
+            sec = 0;
+            updateDisplay();
+            lapsContainer.innerHTML = '';  
+        });
+
+        lapBtn.addEventListener('click', function() {
+            if (timer) {
+                const lapTime = document.createElement('li');
+                lapTime.textContent = `${formatTime(hour)}:${formatTime(min)}:${formatTime(sec)}`;
+                const deleteBtn = document.createElement('button');
+                deleteBtn.textContent = 'Delete';
+                deleteBtn.classList.add('delete-btn');
+                deleteBtn.onclick = () => lapTime.remove();
+                lapTime.appendChild(deleteBtn);
+                lapsContainer.appendChild(lapTime);
+            }
+        });
+
+        function stopwatch() {
+            if (timer) {
+                sec++;
+                if (sec == 60) {
+                    min++;
+                    sec = 0;
+                }
+                if (min == 60) {
+                    hour++;
+                    min = 0;
+                    sec = 0;
+                }
+                updateDisplay();
+                setTimeout(stopwatch, 1000);
+            }
+        }
+
+        function updateDisplay() {
+            document.getElementById('hr').innerHTML = formatTime(hour);
+            document.getElementById('min').innerHTML = formatTime(min);
+            document.getElementById('sec').innerHTML = formatTime(sec);
+        }
+
+        function formatTime(time) {
+            return time < 10 ? "0" + time : time;
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dosis&family=Teko:wght@300..700&display=swap');
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(to right, #1f4037, #99f2c8); 
+            height: 100vh;
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .container {
+            margin-top:30px; 
+            border: 2px solid rgba(0, 0, 0, 0.2);
+            width: 40%;
+            min-height: 400px;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+            border-radius: 90px;
+            background: linear-gradient(to right, #cb1a14, #c46f15); 
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .container:hover {
+            transform: scale(1.02);
+        }
+
+        .display {
+            font-size: 70px;
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-style: inset;
+            height: 90px;
+            border-radius: 80px 80px 20px 20px;
+            width: 90%;
+            font-family: "Teko", serif;
+            font-optical-sizing: auto;
+            font-weight: 500;
+            font-style: normal;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            column-gap: 10px;
+            width: 80%;
+        }
+
+        button {
+            height: 80px;
+            width: 100px;
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+            border-radius: 10px;
+            border: none;
+            background: linear-gradient(45deg, #11998e, #38ef7d); 
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: transform 0.1s ease-in-out, background 0.6s ease, color 0.4s ease;
+        }
+
+        button:hover {
+            background: linear-gradient(45deg, #8d3e28, #c2e016);
+            transform: scale(1.1);
+            color: #ef1616;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            width: 90%;
+        }
+
+        li {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 10px;
+        }
+
+        .delete-btn {
+            width: 50px;
+            height: 20px;
+            font-size: 12px;
+            padding: 5px;
+            margin-left: 10px;
+            cursor: pointer;
+            background-color: #ff5c5c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+    </style>
+</html>
