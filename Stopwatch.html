@@ -194,7 +194,13 @@
             list-style-type: none;
             padding: 0;
             width: 90%;
-        }
+            max-height:350px; 
+            overflow-y: auto;  
+            background-color: rgba(0, 0, 0, 0.1); 
+            border-radius: 8px;
+            margin-top: 10px;
+            scroll-behavior: smooth;
+}
 
         li {
             background: rgba(255, 255, 255, 0.2);
@@ -205,7 +211,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 10px;
         }
 
         .delete-btn {
